@@ -1,12 +1,23 @@
 module.exports = {
+  // generates src/gatsby-types.d.ts so GraphQL results are typed
+  graphqlTypegen: true,
   siteMetadata: {
     title: `Himanshu Gupta`,
-    description: `Gatsby Markdown Personal Website Starter, using Typescript, Styled Components, Tailwindcss and Framer Motion.`,
-    author: `Saimir Kapaj`
+    description: `Himanshu Gupta is a full stack developer building web apps, native mobile apps and APIs with JavaScript, TypeScript, React, React Native and Elixir.`,
+    author: `Himanshu Gupta`,
+    role: `Full Stack Developer`,
+    email: `himanshu0128gupta@gmail.com`,
+    social: {
+      github: `https://github.com/himanshu0128`,
+      twitter: `https://twitter.com/himanshu0128`,
+      linkedin: `https://linkedin.com/in/himanshu0128`,
+      devto: `https://dev.to/himanshu0128`,
+      codementor: `https://www.codementor.io/@himanshu0128`
+    }
   },
   plugins: [
-    `gatsby-plugin-typescript`,
-    `gatsby-plugin-react-helmet`,
+    `gatsby-plugin-postcss`,
+    `gatsby-plugin-image`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
@@ -21,43 +32,33 @@ module.exports = {
         path: `${__dirname}/src/data`
       }
     },
+    `gatsby-transformer-sharp`,
+    `gatsby-plugin-sharp`,
     {
-      resolve: 'gatsby-transformer-remark',
+      resolve: `gatsby-transformer-remark`,
       options: {
         plugins: [
           {
-            resolve: 'gatsby-remark-images',
+            resolve: `gatsby-remark-images`,
             options: {
               maxWidth: 768,
-              linkImagesToOriginal: false
+              linkImagesToOriginal: false,
+              backgroundColor: `transparent`
             }
           }
         ]
       }
     },
-    `gatsby-transformer-sharp`,
-    `gatsby-plugin-sharp`,
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `gatsby-personal-website-starter`,
-        short_name: `starter`,
+        name: `Himanshu Gupta`,
+        short_name: `Himanshu`,
         start_url: `/`,
-        background_color: `#81e6d9`,
-        theme_color: `#81e6d9`,
+        background_color: `#ffffff`,
+        theme_color: `#0d9488`,
         display: `minimal-ui`,
-        icon: `src/assets/images/gatsby-icon.png`
-      }
-    },
-    `gatsby-plugin-offline`,
-    `gatsby-plugin-styled-components`,
-    `gatsby-plugin-postcss`,
-    `gatsby-plugin-tailwindcss`,
-    {
-      resolve: `gatsby-plugin-purgecss`,
-      options: {
-        tailwind: true,
-        purgeOnly: [`src/assets/styles/global.css`]
+        icon: `src/assets/images/icon.svg`
       }
     }
   ]
