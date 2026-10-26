@@ -9,54 +9,97 @@ exports.onCreateWebpackConfig = ({ actions }) => {
   });
 };
 
-exports.onCreateNode = ({ node, actions, getNode }) => {
-  const { createNodeField } = actions;
+/**
+ * Explicit frontmatter types so queries don't break when a field is missing
+ * from every markdown file (e.g. no post has a cover yet).
+ */
+exports.createSchemaCustomization = ({ actions }) => {
+  actions.createTypes(`
+    type MarkdownRemark implements Node {
+      frontmatter: Frontmatter
+      fields: Fields
+    }
 
+    type Fields {
+      slug: String
+    }
+
+    type Frontmatter {
+      category: String
+      title: String
+      subtitle: String
+      description: String
+      content: String
+      date: Date @dateformat
+      tags: [String]
+      published: Boolean
+      cover: File @fileByRelativePath
+      company: String
+      position: String
+      location: String
+      startDate: String
+      endDate: String
+      university: String
+      degree: String
+      icon: String
+      linkTo: String
+      linkText: String
+      groups: [SkillGroup]
+    }
+
+    type SkillGroup {
+      name: String
+      items: [String]
+    }
+  `);
+};
+
+exports.onCreateNode = ({ node, actions, getNode }) => {
   if (node.internal.type === `MarkdownRemark`) {
-    const value = createFilePath({ node, getNode });
-    createNodeField({
+    actions.createNodeField({
       name: `slug`,
       node,
-      value
+      value: createFilePath({ node, getNode })
     });
   }
 };
 
-exports.createPages = async ({ graphql, actions }) => {
-  const { createPage } = actions;
-  const blogPostTemplate = path.resolve(`src/templates/BlogPost/index.tsx`);
-
+exports.createPages = async ({ graphql, actions, reporter }) => {
   const res = await graphql(`
     query {
       allMarkdownRemark(
-        filter: { frontmatter: { category: { eq: "blog" } } }
-        sort: { fields: frontmatter___date, order: DESC }
+        filter: { frontmatter: { category: { eq: "blog" }, published: { eq: true } } }
+        sort: { frontmatter: { date: DESC } }
       ) {
-        edges {
-          node {
-            fields {
-              slug
-            }
-            frontmatter {
-              title
-            }
+        nodes {
+          fields {
+            slug
+          }
+          frontmatter {
+            title
           }
         }
       }
     }
   `);
 
-  const posts = res.data.allMarkdownRemark.edges;
+  if (res.errors) {
+    reporter.panicOnBuild(`Error while loading blog posts`, res.errors);
+    return;
+  }
+
+  const posts = res.data.allMarkdownRemark.nodes;
 
   posts.forEach((post, index) => {
-    const previous = index === posts.length - 1 ? null : posts[index + 1].node;
-    const next = index === 0 ? null : posts[index - 1].node;
+    // posts are sorted newest first
+    const previous = index === posts.length - 1 ? null : posts[index + 1];
+    const next = index === 0 ? null : posts[index - 1];
 
-    createPage({
-      path: `${post.node.fields.slug}`,
-      component: blogPostTemplate,
+    actions.createPage({
+      path: post.fields.slug,
+      component: path.resolve(`src/templates/blog-post.tsx`),
       context: {
-        slug: `${post.node.fields.slug}`,
+        slug: post.fields.slug,
         previous,
         next
       }
