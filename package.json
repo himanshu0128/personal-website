@@ -5,6 +5,9 @@
   "version": "1.0.0",
   "author": "Himanshu Gupta",
   "license": "MIT",
+  "engines": {
+    "node": ">=20 <26"
+  },
   "scripts": {
     "develop": "gatsby develop",
     "start": "npm run develop",
