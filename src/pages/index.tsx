@@ -91,7 +91,6 @@ const IndexPage: React.FC<PageProps<Queries.HomePageQuery>> = ({ data }) => {
                 <FontAwesomeIcon icon={faCode} className="h-4 w-4" />
               </span>
               <div className="text-sm leading-tight">
-                <p className="text-zinc-500">Currently</p>
                 <p className="font-semibold text-zinc-900 dark:text-white">
                   {primaryRole.position} @ {primaryRole.company}
                 </p>

@@ -1,9 +1,22 @@
-const React = require(`react`);
+const React = require('react');
 
-// Applies the saved / system colour scheme before first paint to avoid a light-mode flash.
-const themeScript = `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark');}}catch(e){}})();`;
+/**
+ * Runs before first paint: applies the saved / system colour scheme so dark mode
+ * doesn't flash white on load.
+ */
+const themeScript = `
+(function () {
+  try {
+    var stored = localStorage.getItem('theme');
+    var dark = stored ? stored === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.classList.toggle('dark', dark);
+  } catch (e) {}
+})();
+`;
 
-exports.onRenderBody = ({ setHtmlAttributes, setPreBodyComponents }) => {
-  setHtmlAttributes({ lang: `en` });
-  setPreBodyComponents([React.createElement(`script`, { key: `theme`, dangerouslySetInnerHTML: { __html: themeScript } })]);
+exports.onRenderBody = ({ setHtmlAttributes, setHeadComponents }) => {
+  setHtmlAttributes({ lang: 'en' });
+  setHeadComponents([
+    React.createElement('script', { key: 'theme', dangerouslySetInnerHTML: { __html: themeScript } })
+  ]);
 };

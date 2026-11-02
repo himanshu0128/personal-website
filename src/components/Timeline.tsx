@@ -16,30 +16,51 @@ interface Props {
 }
 
 const Timeline: React.FC<Props> = ({ items }) => (
-  <ol className="relative border-l border-zinc-200 dark:border-zinc-800">
-    {items.map((item) => {
+  <ol className="relative">
+    {items.map((item, index) => {
       const current = isCurrent(item.endDate);
+      const last = index === items.length - 1;
+
       return (
-        <li key={item.id} className="relative pb-10 pl-8 last:pb-0">
+        <li key={item.id} className="relative grid gap-1 pb-10 pl-8 sm:grid-cols-[11rem_1fr] sm:gap-8 sm:pl-0">
+          {/* date column */}
+          <p className="font-mono text-xs leading-7 text-zinc-500 sm:text-right">
+            {item.startDate} — {item.endDate}
+          </p>
+
+          {/* rail + dot */}
           <span
             aria-hidden
-            className={`absolute -left-[7px] top-1.5 h-3.5 w-3.5 rounded-full border-2 border-white dark:border-zinc-950 ${
-              current ? 'bg-accent-500' : 'bg-zinc-300 dark:bg-zinc-700'
+            className={`absolute left-[5px] top-2 w-px bg-zinc-200 dark:bg-zinc-800 sm:left-[calc(11rem+1rem-0.5px)] ${
+              last ? 'h-0' : 'bottom-0 h-auto'
             }`}
           />
-          <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
-            <h3 className="text-lg font-semibold tracking-tight">{item.title}</h3>
-            <p className="shrink-0 font-mono text-xs text-zinc-500">
-              {item.startDate} — {item.endDate}
-            </p>
+          <span
+            aria-hidden
+            className={`absolute left-0 top-[9px] h-[11px] w-[11px] rounded-full border-2 sm:left-[calc(11rem+1rem-5.5px)] ${
+              current
+                ? 'border-accent-500 bg-accent-500 shadow-[0_0_0_4px] shadow-accent-500/20'
+                : 'border-zinc-300 bg-white dark:border-zinc-700 dark:bg-zinc-950'
+            }`}
+          />
+
+          <div>
+            <h3 className="flex flex-wrap items-center gap-x-3 gap-y-1 text-lg font-semibold tracking-tight">
+              {item.title}
+              {current && (
+                <span className="rounded-full bg-accent-50 px-2 py-0.5 text-xs font-medium text-accent-700 ring-1 ring-inset ring-accent-600/20 dark:bg-accent-500/10 dark:text-accent-300 dark:ring-accent-400/20">
+                  Current
+                </span>
+              )}
+            </h3>
+            <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">{item.subtitle}</p>
+            {item.html && (
+              <div
+                className="mt-3 leading-relaxed text-zinc-600 dark:text-zinc-400"
+                dangerouslySetInnerHTML={{ __html: item.html }}
+              />
+            )}
           </div>
-          <p className="mt-0.5 font-medium text-accent-700 dark:text-accent-400">{item.subtitle}</p>
-          {item.html && (
-            <div
-              className="prose prose-zinc mt-3 max-w-none dark:prose-invert"
-              dangerouslySetInnerHTML={{ __html: item.html }}
-            />
-          )}
         </li>
       );
     })}

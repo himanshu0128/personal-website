@@ -1,11 +1,12 @@
 ---
 category: 'skills section'
 title: 'Skills'
+subtitle: 'Technologies & Tools'
 groups:
-  - name: 'Front end'
-    items: ['JavaScript', 'TypeScript', 'React', 'React Native', 'Gatsby', 'HTML & CSS']
-  - name: 'Back end'
-    items: ['Elixir', 'Phoenix', 'Node.js', 'REST APIs', 'GraphQL']
-  - name: 'Data & tooling'
-    items: ['PostgreSQL', 'MySQL', 'Git', 'CI/CD']
+  - name: 'Languages'
+    items: ['JavaScript', 'TypeScript', 'Elixir']
+  - name: 'Frontend & Mobile'
+    items: ['React', 'React Native', 'Gatsby']
+  - name: 'Data & Tooling'
+    items: ['PostgreSQL', 'MySQL', 'Git & GitHub']
 ---

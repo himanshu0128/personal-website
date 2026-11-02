@@ -3,25 +3,22 @@ import React from 'react';
 interface Props {
   eyebrow?: string;
   title: string;
-  description?: string;
+  description?: React.ReactNode;
   action?: React.ReactNode;
   as?: 'h1' | 'h2';
+  className?: string;
 }
 
-const SectionHeading: React.FC<Props> = ({ eyebrow, title, description, action, as: Heading = 'h2' }) => (
-  <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+const SectionHeading: React.FC<Props> = ({ eyebrow, title, description, action, as: Tag = 'h2', className = '' }) => (
+  <div className={`flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between ${className}`}>
     <div className="max-w-2xl">
-      {eyebrow && (
-        <p className="font-mono text-sm font-medium uppercase tracking-widest text-accent-700 dark:text-accent-400">
-          {eyebrow}
-        </p>
-      )}
-      <Heading
-        className={`mt-2 font-bold tracking-tight ${Heading === 'h1' ? 'text-4xl sm:text-5xl' : 'text-3xl sm:text-4xl'}`}
+      {eyebrow && <p className="eyebrow">{eyebrow}</p>}
+      <Tag
+        className={`mt-3 font-bold tracking-tight ${Tag === 'h1' ? 'text-4xl sm:text-5xl' : 'text-2xl sm:text-3xl'}`}
       >
         {title}
-      </Heading>
-      {description && <p className="mt-4 text-lg text-zinc-600 dark:text-zinc-400">{description}</p>}
+      </Tag>
+      {description && <p className="mt-4 text-lg leading-relaxed text-zinc-600 dark:text-zinc-400">{description}</p>}
     </div>
     {action && <div className="shrink-0">{action}</div>}
   </div>
