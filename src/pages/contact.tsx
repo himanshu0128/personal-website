@@ -90,20 +90,6 @@ const ContactPage: React.FC<PageProps<Queries.ContactPageQuery>> = ({ data }) =>
                 </li>
               ))}
             </ul>
-            <a
-              href="https://www.codementor.io/@himanshu0128?refer=badge"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-6 inline-block transition hover:opacity-80"
-            >
-              <img
-                src="https://www.codementor.io/m-badges/himanshu0128/contact-me.svg"
-                alt="Contact me on Codementor"
-                width={170}
-                height={40}
-                loading="lazy"
-              />
-            </a>
           </div>
         </div>
       </div>
